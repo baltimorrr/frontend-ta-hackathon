@@ -1,56 +1,120 @@
-import { fNumber } from 'utils/formatNumber'
 import merge from 'lodash/merge'
 import BaseOptionChart from 'components/chart/BaseOptionChart'
 import { Box, Card, CardHeader } from '@mui/material'
 import ReactApexChart from 'react-apexcharts'
+import { useEffect, useState } from 'react'
+import { _getApi } from 'utils/axios'
+import ChatToolbar from './ChartToolbar'
 
-
-const chartData = [
-  { label: 'Italy', value: 400 },
-  { label: 'Japan', value: 430 },
-  { label: 'China', value: 448 },
-  { label: 'Canada', value: 470 },
-  { label: 'France', value: 540 },
-  { label: 'Germany', value: 580 },
-  { label: 'South Korea', value: 690 },
-  { label: 'Netherlands', value: 1100 },
-  { label: 'United States', value: 1200 },
-  { label: 'United Kingdom', value: 1380 },
-]
-
-export default function ChartSection({...other}) {
-  const chartLabels = chartData.map((i) => i.label)
-
-  const chartSeries = chartData.map((i) => i.value)
+export default function ChartSection({ ...other }) {
+  const [aiReportData, setAIReportData] = useState([])
+  const chartDataFake = {
+    series: [
+      {
+        name: 'Inflation',
+        data: aiReportData?.map((it) => it?.totalCost),
+      },
+    ],
+  }
 
   const chartOptions = merge(BaseOptionChart(), {
-    tooltip: {
-      marker: { show: false },
-      y: {
-        formatter: (seriesName) => fNumber(seriesName),
-        title: {
-          formatter: () => '',
+    chart: {
+      height: 350,
+      type: 'bar',
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        dataLabels: {
+          position: 'top', // top, center, bottom
         },
       },
     },
-    plotOptions: {
-      bar: { horizontal: true, barHeight: '28%', borderRadius: 2 },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val) {
+        return Number(val).toFixed(5)
+      },
+      offsetY: -20,
+      style: {
+        fontSize: '12px',
+        colors: ['#304758'],
+      },
     },
     xaxis: {
-      categories: chartLabels,
+      categories: aiReportData?.map((it) => it?.date),
+      position: 'top',
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+      crosshairs: {
+        fill: {
+          type: 'gradient',
+          gradient: {
+            colorFrom: '#D8E3F0',
+            colorTo: '#BED1E6',
+            stops: [0, 100],
+            opacityFrom: 0.4,
+            opacityTo: 0.5,
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
+    yaxis: {
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+      labels: {
+        show: false,
+        formatter: function (val) {
+          return val + '%'
+        },
+      },
+    },
+    title: {
+      text: 'Total cost',
+      floating: true,
+      offsetY: 345,
+      align: 'center',
+      style: {
+        color: '#444',
+      },
     },
   })
 
-  console.log(chartOptions)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await _getApi('ai-report')
+        setAIReportData(response)
+        console.log('res', response)
+      } catch (error) {}
+    }
+
+    fetchData()
+  }, [])
 
   return (
     <Card {...other}>
-      <CardHeader title={'title'} subheader={'subheader'}/>
+      <CardHeader title={'title'} subheader={'subheader'} />
 
       <Box sx={{ mx: 3 }} dir='ltr'>
-
-<ReactApexChart type="bar" series={[{ data: chartSeries }]} options={chartOptions} height={364} />
-
+        {/* <ChatToolbar /> */}
+        <ReactApexChart
+          type='bar'
+          series={chartDataFake?.series}
+          options={chartOptions}
+          height={364}
+        />
       </Box>
     </Card>
   )

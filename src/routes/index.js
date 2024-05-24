@@ -32,9 +32,7 @@ export default function Router() {
       children: [
         {
           index: true,
-          element: (
-            <ChatPage />
-          ),
+          element: <ChatPage />,
         },
       ],
     },
@@ -48,10 +46,7 @@ export default function Router() {
       children: [
         {
           index: true,
-          element: (
-                         <ChartPage />
-
-          ),
+          element: <ChartPage />,
         },
       ],
     },
@@ -65,9 +60,7 @@ export default function Router() {
       children: [
         {
           index: true,
-          element: (
-              <ListPage />
-          ),
+          element: <ListPage />,
         },
       ],
     },

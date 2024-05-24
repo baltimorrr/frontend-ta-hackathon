@@ -33,7 +33,7 @@ export const setSession = (accessToken) => {
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
 
     const { exp } = jwtDecode(accessToken)
-    handleAccessTokenExpired(exp)
+    // handleAccessTokenExpired(exp)
   } else {
     localStorage.removeItem('accessToken')
     delete axios.defaults.headers.common.Authorization

@@ -38,17 +38,16 @@ export default function RHFAutocomplete({
           label={option}
         />
       )),
-    renderInput: (field, error) => (params) =>
-      (
-        <TextField
-          {...field}
-          fullWidth
-          error={!error}
-          helperText={error?.message || error?.value?.message}
-          {...other}
-          {...params}
-        />
-      ),
+    renderInput: (field, error) => (params) => (
+      <TextField
+        {...field}
+        fullWidth
+        error={!error}
+        helperText={error?.message || error?.value?.message}
+        {...other}
+        {...params}
+      />
+    ),
     ...AutocompleteProps,
   }
 
