@@ -8,10 +8,14 @@ UserTableRow.propTypes = {
 }
 
 export default function UserTableRow({ row = {} }) {
-  const { name, email, phone, address } = row || {}
+  const { title, name, email, phone, createdAt } = row || {}
 
   return (
     <MuiTableRow hover>
+      <TableCell align='left' width='15%'>
+        {title}
+      </TableCell>
+
       <TableCell align='left' width='15%'>
         {name}
       </TableCell>
@@ -25,7 +29,7 @@ export default function UserTableRow({ row = {} }) {
       </TableCell>
 
       <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
-        {address}
+        {createdAt}
       </TableCell>
     </MuiTableRow>
   )
