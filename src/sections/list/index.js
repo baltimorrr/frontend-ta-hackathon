@@ -61,11 +61,17 @@ export default function ListUser() {
             cvInJson: {
               ...item?.cvInJson,
               createdAt: item?.createdAt,
-            },
+              id: item?.id,
+              file_key: item?.file_key
+            }
           }
         })
 
-        setListResume(data)
+        const listResumeData = data?.map((item) => {
+          return item?.cvInJson
+        })
+
+        setListResume(listResumeData)
         setTotalRecords(response?.totalRecords)
       } catch (error) {
         setIsLoadingData(false)

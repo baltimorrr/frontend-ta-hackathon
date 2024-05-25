@@ -28,7 +28,7 @@ export default function ChatPage() {
         }}
       >
         <HeaderBreadcrumbs
-          heading='Chat'
+          heading='TA Chatbot'
           sx={{
             px: 2,
           }}

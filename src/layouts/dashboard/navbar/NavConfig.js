@@ -19,17 +19,17 @@ const navConfig = [
     subheader: '',
     items: [
       {
-        title: 'chat',
+        title: 'TA Chatbot',
         path: PATH_DASHBOARD.general.chat,
         icon: ICONS.chat,
       },
       {
-        title: 'chart',
+        title: 'Usage Report',
         path: PATH_DASHBOARD.general.chart,
         icon: ICONS.chart,
       },
       {
-        title: 'list',
+        title: 'CVs',
         path: PATH_DASHBOARD.general.list,
         icon: ICONS.list,
       },
