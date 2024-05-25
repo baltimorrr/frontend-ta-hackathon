@@ -147,8 +147,6 @@ export default function AuthProvider({ children }) {
   }
 
   const logout = async () => {
-    // setRememberMe(null)
-    // setRefreshToken(null)
     setSession(null)
     dispatch({ type: 'LOGOUT' })
   }

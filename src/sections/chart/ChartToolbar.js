@@ -9,9 +9,9 @@ import { AI_MODEL_OPTIONS } from './config'
 
 export default function ChatToolbar({ isSubmitting }) {
   return (
-    <Grid container spacing={1} fullWidth>
+    <Grid container spacing={1} fullWidth sx={{ mb: 4 }}>
       <Grid item xs={4}>
-        <RHFBasicSelect name='model' options={AI_MODEL_OPTIONS} />
+        <RHFBasicSelect label='Model' name='model' options={AI_MODEL_OPTIONS} />
       </Grid>
 
       <Grid item xs={3}>

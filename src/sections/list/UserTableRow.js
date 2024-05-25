@@ -2,6 +2,7 @@
 import { TableCell, TableRow as MuiTableRow } from '@mui/material'
 
 import PropTypes from 'prop-types'
+import { useNavigate } from 'react-router-dom'
 import { fDate } from 'utils/formatTime'
 
 UserTableRow.propTypes = {
@@ -9,10 +10,15 @@ UserTableRow.propTypes = {
 }
 
 export default function UserTableRow({ row = {} }) {
-  const { title, name, email, phone, createdAt } = row || {}
+  const { title, name, email, phone, createdAt, id } = row || {}
+  const navigate = useNavigate()
 
   return (
-    <MuiTableRow hover>
+    <MuiTableRow
+      hover
+      onClick={() => navigate(`/resume/${id}`)}
+      sx={{ cursor: 'pointer' }}
+    >
       <TableCell align='left' width='15%'>
         {title}
       </TableCell>

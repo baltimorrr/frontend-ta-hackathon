@@ -1,13 +1,25 @@
 import { useCallback, useEffect, useState } from 'react'
 
 // @mui
-import { Box, Card, List, ListItemText, Typography } from '@mui/material'
+import {
+  Box,
+  Card,
+  Chip,
+  List,
+  ListItemText,
+  Stack,
+  Typography,
+} from '@mui/material'
 
 // components
 import BasicTable from 'components/BasicTable'
 import { useSnackbar } from 'notistack'
 import { _getApi } from '../../utils/axios'
-import { TABLE_CERTIFICATIONS_HEAD, TABLE_EDUCATION_HEAD, TABLE_WORK_EXPERIENCE_HEAD } from './config'
+import {
+  TABLE_CERTIFICATIONS_HEAD,
+  TABLE_EDUCATION_HEAD,
+  TABLE_WORK_EXPERIENCE_HEAD,
+} from './config'
 import WorkExperienceTableRow from './WorkExperienceTableRow'
 import EducationTableRow from './EducationTableRow'
 import CertificationsTableRow from './CertificationsTableRow'
@@ -46,7 +58,7 @@ export default function DetailResume({ id }) {
         enqueueSnackbar(error?.message, { variant: 'error' })
       }
     },
-    [enqueueSnackbar],
+    [enqueueSnackbar]
   )
 
   useEffect(() => {
@@ -59,48 +71,38 @@ export default function DetailResume({ id }) {
 
   return (
     <>
-      {
-        resumeDetail?.cvInJson?.title && (
-          <p>
-            <b>Title: </b> {resumeDetail?.cvInJson?.title}
-          </p>
-        )
-      }
+      {resumeDetail?.cvInJson?.title && (
+        <p>
+          <b>Title: </b> {resumeDetail?.cvInJson?.title}
+        </p>
+      )}
 
-      {
-        resumeDetail?.cvInJson?.name && (
-          <p>
-            <b>Name: </b> {resumeDetail?.cvInJson?.name}
-          </p>
-        )
-      }
+      {resumeDetail?.cvInJson?.name && (
+        <p>
+          <b>Name: </b> {resumeDetail?.cvInJson?.name}
+        </p>
+      )}
 
-      {
-        resumeDetail?.cvInJson?.email && (
-          <p>
-            <b>Email: </b> {resumeDetail?.cvInJson?.email}
-          </p>
-        )
-      }
+      {resumeDetail?.cvInJson?.email && (
+        <p>
+          <b>Email: </b> {resumeDetail?.cvInJson?.email}
+        </p>
+      )}
 
-      {
-        resumeDetail?.cvInJson?.phone && (
-          <p>
-            <b>Phone: </b> {resumeDetail?.cvInJson?.phone}
-          </p>
-        )
-      }
+      {resumeDetail?.cvInJson?.phone && (
+        <p>
+          <b>Phone: </b> {resumeDetail?.cvInJson?.phone}
+        </p>
+      )}
 
-      {
-        resumeDetail?.cvInJson?.address && (
-          <p>
-            <b>Address: </b> {resumeDetail?.cvInJson?.address}
-          </p>
-        )
-      }
+      {resumeDetail?.cvInJson?.address && (
+        <p>
+          <b>Address: </b> {resumeDetail?.cvInJson?.address}
+        </p>
+      )}
 
-      {
-        resumeDetail?.cvInJson?.work_experience?.length > 0 && (
+      <Stack spacing={2}>
+        {resumeDetail?.cvInJson?.work_experience?.length > 0 && (
           <Card>
             <Box mt={2}>
               <Typography variant='h5' ml={2}>
@@ -117,11 +119,9 @@ export default function DetailResume({ id }) {
               />
             </Box>
           </Card>
-        )
-      }
+        )}
 
-      {
-        resumeDetail?.cvInJson?.education?.length > 0 && (
+        {resumeDetail?.cvInJson?.education?.length > 0 && (
           <Card>
             <Box mt={2}>
               <Typography variant='h5' ml={2}>
@@ -138,38 +138,37 @@ export default function DetailResume({ id }) {
               />
             </Box>
           </Card>
-        )
-      }
+        )}
 
-      {
-        resumeDetail?.cvInJson?.skills?.length > 0 && (
-          <Card pl={2}>
+        {resumeDetail?.cvInJson?.skills?.length > 0 && (
+          <Card sx={{ p: 2 }}>
             <Box mt={2}>
-              <Typography variant='h5' ml={2}>
+              <Typography variant='h5' mb={2}>
                 Skills
               </Typography>
 
-              <List>
-                {
-                  resumeDetail?.cvInJson?.skills?.map((item) => {
-                    return (
-                      <>
-                        <ListItemText
-                          ml={2}
-                          primary={item}
-                        />
-                      </>
-                    )
-                  })
-                }
-              </List>
+              <Stack
+                direction='row'
+                alignItems='center'
+                flexWrap='wrap'
+                gap={1}
+              >
+                {resumeDetail?.cvInJson?.skills?.map((item) => {
+                  return (
+                    <>
+                      <Chip
+                        label={<Typography variant='body2'>{item}</Typography>}
+                      />
+                      {/* <ListItemText ml={2} primary={item} /> */}
+                    </>
+                  )
+                })}
+              </Stack>
             </Box>
           </Card>
-        )
-      }
+        )}
 
-      {
-        resumeDetail?.cvInJson?.certifications?.length > 0 && (
+        {resumeDetail?.cvInJson?.certifications?.length > 0 && (
           <Card>
             <Box mt={2}>
               <Typography variant='h5' ml={2}>
@@ -186,8 +185,8 @@ export default function DetailResume({ id }) {
               />
             </Box>
           </Card>
-        )
-      }
+        )}
+      </Stack>
     </>
   )
 }

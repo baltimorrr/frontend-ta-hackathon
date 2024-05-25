@@ -20,10 +20,11 @@ export default function UploadResumeModal({ open, onClose }) {
     async (file) => {
       try {
         setIsSubmitting(true)
-        await _uploadApi('resume/upload', { file })
+        const res = await _uploadApi('resume/upload', { file })
+        console.log('res', res)
         setIsSubmitting(false)
-        onClose()
         enqueueSnackbar('Upload file success')
+        onClose()
       } catch (error) {
         setIsSubmitting(false)
         enqueueSnackbar('Upload file fail! Please try again', {

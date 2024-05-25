@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import NavbarVertical from 'layouts/dashboard/navbar/NavbarVertical'
 import { Outlet } from 'react-router-dom'
 

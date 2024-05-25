@@ -141,14 +141,6 @@ export default function UploadSingleCV({
       ...other,
     })
 
-  useEffect(() => {
-    if (!acceptedFiles[0]) return
-
-    enqueueSnackbar('Upload file success', {
-      autoHideDuration: 5000,
-    })
-  }, [acceptedFiles, enqueueSnackbar])
-
   return (
     <Box sx={{ width: '100%', ...sx }}>
       <DropZoneStyle

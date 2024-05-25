@@ -7,6 +7,7 @@ import {
   useTheme,
   styled,
   Button,
+  LinearProgress,
 } from '@mui/material'
 import Loading from 'components/Loading'
 import FormProvider from 'components/form/FormProvider'
@@ -140,7 +141,7 @@ export default function ChatSection() {
 
       <Card
         sx={{
-          height: '80vh',
+          height: 'calc(100% - 80px)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',

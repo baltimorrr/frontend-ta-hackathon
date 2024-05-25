@@ -6,10 +6,13 @@ import { useParams } from 'react-router-dom'
 import DetailResume from '../sections/detail'
 
 export default function DetailPage() {
-  const {id} = useParams();
+  const { id } = useParams()
 
   return (
-    <Page title='Detail Resume' sx={{ width: '100%' }}>
+    <Page
+      title='Detail Resume'
+      sx={{ width: '100%', overflowY: 'auto', pb: 3 }}
+    >
       <Container>
         <HeaderBreadcrumbs
           heading='Detail Resume'
@@ -18,7 +21,7 @@ export default function DetailPage() {
           }}
         />
 
-        <DetailResume id={id}/>
+        <DetailResume id={id} />
       </Container>
     </Page>
   )
