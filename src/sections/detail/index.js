@@ -80,6 +80,12 @@ export default function DetailResume({ id }) {
       {resumeDetail?.cvInJson?.name && (
         <p>
           <b>Name: </b> {resumeDetail?.cvInJson?.name}
+          {'  '}
+          {resumeDetail?.fileUrl && (
+            <span>
+              <a href={resumeDetail?.fileUrl}>(View file) </a>
+            </span>
+          )}
         </p>
       )}
 
