@@ -3,27 +3,36 @@ import { Grid } from '@mui/material'
 
 // components
 import RHFDatePicker from 'components/form/RHFDatePicker'
-import FormProvider from 'components/form/FormProvider'
-import { useForm } from 'react-hook-form'
+import RHFBasicSelect from 'components/form/RHFBasicSelect'
+import { LoadingButton } from '@mui/lab'
+import { AI_MODEL_OPTIONS } from './config'
 
-export default function ChatToolbar() {
-  const methods = useForm({
-    defaultValues: {
-      startDate: null,
-      endDate: null,
-    },
-  })
+export default function ChatToolbar({ isSubmitting }) {
   return (
-    <FormProvider methods={methods}>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <RHFDatePicker label='Start Date' name='startDate' size='small' />
-        </Grid>
-
-        <Grid item xs={6}>
-          <RHFDatePicker label='End Date' name='endDate' size='small' />
-        </Grid>
+    <Grid container spacing={1} fullWidth>
+      <Grid item xs={4}>
+        <RHFBasicSelect name='model' options={AI_MODEL_OPTIONS} />
       </Grid>
-    </FormProvider>
+
+      <Grid item xs={3}>
+        <RHFDatePicker label='From Date' name='fromDate' />
+      </Grid>
+
+      <Grid item xs={3}>
+        <RHFDatePicker label='To Date' name='toDate' />
+      </Grid>
+
+      <Grid item xs={2}>
+        <LoadingButton
+          type='submit'
+          variant='contained'
+          loading={isSubmitting}
+          size='large'
+          sx={{ height: '100%', width: '100%' }}
+        >
+          Search
+        </LoadingButton>
+      </Grid>
+    </Grid>
   )
 }
