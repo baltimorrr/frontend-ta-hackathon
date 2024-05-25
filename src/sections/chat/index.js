@@ -1,84 +1,22 @@
 import { LoadingButton } from '@mui/lab'
-import { Card, Stack, Typography, alpha, useTheme, styled } from '@mui/material'
-import zIndex from '@mui/material/styles/zIndex'
+import {
+  Card,
+  Stack,
+  Typography,
+  alpha,
+  useTheme,
+  styled,
+  Button,
+} from '@mui/material'
+import Loading from 'components/Loading'
 import FormProvider from 'components/form/FormProvider'
+import RHFBasicSelect from 'components/form/RHFBasicSelect'
 import RHFTextField from 'components/form/RHFTextField'
+import { useSnackbar } from 'notistack'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-
-const mockMessageData = [
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'yourself',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-  {
-    type: 'bot',
-    message: 'iasdnasdnnas as das da sd as afas',
-  },
-]
+import { AI_MODEL_OPTIONS } from 'sections/chart/config'
+import { _getApi, _postApi } from 'utils/axios'
 
 const MessageStyled = styled(Typography)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -88,28 +26,126 @@ const MessageStyled = styled(Typography)(({ theme }) => ({
   fontSize: 14,
   color: theme.palette.common.black,
   fontWeight: 400,
+  whiteSpace: 'break-spaces',
 }))
 
 export default function ChatSection() {
   const theme = useTheme()
+  const [isLoadingConversationData, setIsLoadingConversationData] =
+    useState(false)
+  const [isSubmittingNewConversation, setIsSubmittingNewConversation] =
+    useState(false)
+  const [conversationData, setConversationData] = useState([])
+  const chatRef = useRef(null)
+  const { enqueueSnackbar } = useSnackbar()
+
+  const fetchConversationData = useCallback(async () => {
+    try {
+      setIsLoadingConversationData(true)
+      const response = await _getApi('chat/currentThread/new')
+      setConversationData(response)
+      setIsLoadingConversationData(false)
+    } catch (error) {
+      setIsLoadingConversationData(false)
+      enqueueSnackbar(
+        error?.message || 'Something went wrong! Please try again',
+        { variant: 'error' }
+      )
+    }
+  }, [enqueueSnackbar])
+
   const methods = useForm({
     defaultValues: {
       message: '',
+      model: AI_MODEL_OPTIONS[0],
     },
   })
 
   const {
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data) => {
+    try {
+      setConversationData((prev) =>
+        prev.concat({
+          id: prev?.length,
+          role: 'user',
+          content: data?.message,
+        })
+      )
+      setValue('message', '')
+      await _postApi('chat/message', data)
+      const conversationResponseData = await _getApi('chat/currentThread/new')
+      setConversationData(conversationResponseData)
+    } catch (error) {
+      enqueueSnackbar(
+        error?.message || 'Something went wrong! Please try again',
+        { variant: 'error' }
+      )
+    }
   }
+
+  const handleCreateNewConversation = async () => {
+    try {
+      setIsSubmittingNewConversation(true)
+      await _postApi('chat/thread/new')
+      const conversationResponseData = await _getApi('chat/currentThread/new')
+      setIsSubmittingNewConversation(false)
+      setConversationData(conversationResponseData)
+    } catch (error) {
+      setIsSubmittingNewConversation(false)
+      enqueueSnackbar(
+        error?.message || 'Something went wrong! Please try again',
+        { variant: 'error' }
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (!chatRef?.current) return
+
+    chatRef?.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    })
+  }, [conversationData])
+
+  useEffect(() => {
+    fetchConversationData()
+  }, [fetchConversationData])
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Card sx={{ height: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      <Stack
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+        sx={{ width: '100%', mb: 2 }}
+      >
+        <RHFBasicSelect
+          label='Model'
+          name='model'
+          options={AI_MODEL_OPTIONS}
+          size='small'
+          sx={{ width: 240 }}
+        />
+
+        <Button variant='contained' onClick={handleCreateNewConversation}>
+          New Conversation
+        </Button>
+      </Stack>
+
+      <Card
+        sx={{
+          height: '80vh',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Stack
           sx={{
             height: '100%',
@@ -118,31 +154,50 @@ export default function ChatSection() {
             justifyContent: 'space-between',
           }}
         >
-          <Stack sx={{ height: '100%' }} spacing={2}>
-            {mockMessageData?.map((it) => {
-              const { type, message } = it || {}
-
+          {(() => {
+            if (isLoadingConversationData || isSubmittingNewConversation)
               return (
-                <Stack>
-                  <MessageStyled
-                    sx={[
-                      type === 'bot'
-                        ? {
-                            alignSelf: 'flex-start',
-                            bgcolor: alpha(theme.palette.grey[500], 0.3),
-                          }
-                        : {
-                            alignSelf: 'flex-end',
-                            bgcolor: alpha(theme.palette.primary.main, 0.3),
-                          },
-                    ]}
-                  >
-                    {message}
-                  </MessageStyled>
-                </Stack>
+                <Loading
+                  sx={{
+                    height: '80vh',
+                    width: '100%',
+                  }}
+                />
               )
-            })}
-          </Stack>
+
+            return (
+              <Stack sx={{ height: '100%' }} spacing={2} ref={chatRef}>
+                {conversationData?.map((it, idx) => {
+                  const { role, content, id } = it || {}
+
+                  return (
+                    <Stack
+                      key={id}
+                      ref={
+                        idx === conversationData?.length - 1 ? chatRef : null
+                      }
+                    >
+                      <MessageStyled
+                        sx={[
+                          role === 'assistant'
+                            ? {
+                                alignSelf: 'flex-start',
+                                bgcolor: alpha(theme.palette.grey[500], 0.3),
+                              }
+                            : {
+                                alignSelf: 'flex-end',
+                                bgcolor: alpha(theme.palette.primary.main, 0.3),
+                              },
+                        ]}
+                      >
+                        {content}
+                      </MessageStyled>
+                    </Stack>
+                  )
+                })}
+              </Stack>
+            )
+          })()}
         </Stack>
 
         <Stack
@@ -155,6 +210,7 @@ export default function ChatSection() {
           <RHFTextField name='message' size='small' sx={{ flex: 9 }} />
 
           <LoadingButton
+            type='submit'
             variant='contained'
             size='large'
             loading={isSubmitting}

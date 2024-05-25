@@ -12,11 +12,10 @@ import { DEFAULT_PAGE } from 'config'
 import useTable from 'hooks/useTable'
 
 import UserTableRow from './UserTableRow'
-import { TABLE_DESKTOP_HEAD, mockData } from './config'
+import { TABLE_DESKTOP_HEAD } from './config'
 import { useSnackbar } from 'notistack'
 import { _getApi } from '../../utils/axios'
 import { fDateEndOfMonth, fDateStartOfMonth } from '../../utils/formatTime'
-import { AI_MODEL_OPTIONS } from '../chart/config'
 import RHFDatePicker from '../../components/form/RHFDatePicker'
 import FormProvider from '../../components/form/FormProvider'
 import { useForm } from 'react-hook-form'
@@ -29,12 +28,12 @@ export default function ListUser() {
   const methods = useForm({
     defaultValues: {
       fromDate: fDateStartOfMonth(new Date()),
-      toDate: fDateEndOfMonth(new Date())
+      toDate: fDateEndOfMonth(new Date()),
     },
   })
 
   const [listResume, setListResume] = useState([])
-  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0)
   const { enqueueSnackbar } = useSnackbar()
 
   const {
@@ -88,8 +87,8 @@ export default function ListUser() {
         page_index: page,
         page_size: rowsPerPage,
         fromDate: fDateStartOfMonth(new Date())?.toISOString(),
-        toDate: fDateEndOfMonth(new Date())?.toISOString()
-      }
+        toDate: fDateEndOfMonth(new Date())?.toISOString(),
+      },
     })
   }, [fetchData, page])
 
@@ -104,7 +103,7 @@ export default function ListUser() {
   }
 
   return (
-    <Card>
+    <Card sx={{ padding: 3 }}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={1} fullWidth>
           <Grid item xs={3}>
