@@ -77,7 +77,7 @@ export default function BasicTable({
           <TableBody>
             {tableData.map((row, index) =>
               row && TableRowComp
-                ? TableRowComp(row?.cvInJson, index)
+                ? TableRowComp(row, index)
                 : !isNotFound && (
                     <TableSkeleton
                       key={index}
