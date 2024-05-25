@@ -9,7 +9,7 @@ import {
   endOfWeek,
   endOfYear,
   format,
-  formatDistanceToNow,
+  formatISO,
   getTime,
   intervalToDuration,
   isAfter,
@@ -28,17 +28,23 @@ import { formatInTimeZone, utcToZonedTime } from 'date-fns-tz'
 import {
   DATETIME_FORMAT_AMPM,
   DATE_FORMAT,
-  DEFAULT_LOCALE,
   HUMAN_DAY_FORMAT,
   HUMAN_MONTH_FORMAT,
   TIMEZONE,
   YEAR_FORMAT,
-  dateFnsLocaleConfig,
 } from 'config'
 
 export function fDate(date, dateFormat = DATE_FORMAT) {
   try {
     return format(new Date(date), dateFormat)
+  } catch (error) {
+    return null
+  }
+}
+
+export function fDateISO(date, dateFormat = DATE_FORMAT) {
+  try {
+    return formatISO(new Date(date), dateFormat)
   } catch (error) {
     return null
   }
@@ -62,13 +68,6 @@ export function fTimestamp(date) {
 
 export function fDateTimeSuffix(date, dateFormat = DATETIME_FORMAT_AMPM) {
   return format(new Date(date), dateFormat)
-}
-
-export function fToNow(date, locale = DEFAULT_LOCALE) {
-  return formatDistanceToNow(new Date(date), {
-    locale: dateFnsLocaleConfig[locale],
-    addSuffix: true,
-  })
 }
 
 export function fDateCalendar(date) {

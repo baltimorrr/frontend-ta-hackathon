@@ -2,20 +2,23 @@ import { Container } from '@mui/material'
 import HeaderBreadcrumbs from 'components/HeaderBreadcrumbs'
 import Page from 'components/Page'
 import ListUser from 'sections/list'
+import { useParams } from 'react-router-dom'
+import DetailResume from '../sections/detail'
 
-export default function ListPage() {
+export default function DetailPage() {
+  const {id} = useParams();
+
   return (
-    <Page title='List' sx={{ width: '100%', overflow: 'auto' }}>
+    <Page title='Detail Resume' sx={{ width: '100%' }}>
       <Container>
         <HeaderBreadcrumbs
-          heading='List'
+          heading='Detail Resume'
           sx={{
             px: 2,
-            mb: 3,
           }}
         />
 
-        <ListUser />
+        <DetailResume id={id}/>
       </Container>
     </Page>
   )
