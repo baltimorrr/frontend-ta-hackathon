@@ -5,12 +5,13 @@ import ListUser from 'sections/list'
 
 export default function ListPage() {
   return (
-    <Page title='List' sx={{ width: '100%' }}>
+    <Page title='List' sx={{ width: '100%', overflow: 'auto' }}>
       <Container>
         <HeaderBreadcrumbs
           heading='List'
           sx={{
             px: 2,
+            mb: 3,
           }}
         />
 

@@ -2,6 +2,7 @@
 import { TableCell, TableRow as MuiTableRow } from '@mui/material'
 
 import PropTypes from 'prop-types'
+import { fDate } from 'utils/formatTime'
 
 UserTableRow.propTypes = {
   row: PropTypes.object,
@@ -29,7 +30,7 @@ export default function UserTableRow({ row = {} }) {
       </TableCell>
 
       <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
-        {createdAt}
+        {!!createdAt ? fDate(createdAt) : null}
       </TableCell>
     </MuiTableRow>
   )
