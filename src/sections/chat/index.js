@@ -17,16 +17,32 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AI_MODEL_OPTIONS } from 'sections/chart/config'
 import { _getApi, _postApi } from 'utils/axios'
+import BounceMessageComponent from '../../components/bounce-message/BounceMessageComponent'
 
 const MessageStyled = styled(Typography)(({ theme }) => ({
   padding: theme.spacing(1.5),
-  borderRadius: theme.spacing(1),
+  borderRadius: theme.spacing(3),
   minWidth: 48,
-  maxWidth: 360,
+  maxWidth: 500,
   fontSize: 14,
   color: theme.palette.common.black,
   fontWeight: 400,
   whiteSpace: 'break-spaces',
+}))
+
+const BounceStyled = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center'
+}))
+
+const BounceItemStyled = styled('div')(({ theme }) => ({
+  width: '16px',
+  height: '16px',
+  margin: '3px 6px',
+  borderRadius: '50%',
+  backgroundColor: '#a3a1a1',
+  opacity: 1,
+  animation: 'bouncing-loader 0.6s infinite alternate'
 }))
 
 export default function ChatSection() {
@@ -190,7 +206,9 @@ export default function ChatSection() {
                               },
                         ]}
                       >
-                        {content}
+                        <div dangerouslySetInnerHTML={{ __html: content }}>
+                        </div>
+                        {/*<BounceMessageComponent />*/}
                       </MessageStyled>
                     </Stack>
                   )
