@@ -2,41 +2,34 @@
 import { TableCell, TableRow as MuiTableRow } from '@mui/material'
 
 import PropTypes from 'prop-types'
-import { useNavigate } from 'react-router-dom'
-import { fDate } from 'utils/formatTime'
 
-UserTableRow.propTypes = {
+WorkExperienceTableRow.propTypes = {
   row: PropTypes.object,
 }
 
-export default function UserTableRow({ row = {} }) {
-  const { title, name, email, phone, createdAt, id } = row || {}
-  const navigate = useNavigate()
+export default function WorkExperienceTableRow({ row = {} }) {
+  const { company, position, description, work_from, work_till } = row || {}
 
   return (
-    <MuiTableRow
-      hover
-      onClick={() => navigate(`/resume/${id}`)}
-      sx={{ cursor: 'pointer' }}
-    >
+    <MuiTableRow hover>
       <TableCell align='left' width='15%'>
-        {title}
+        {company}
       </TableCell>
 
       <TableCell align='left' width='15%'>
-        {name}
+        {position}
       </TableCell>
 
       <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
-        {email}
+        {description}
       </TableCell>
 
       <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
-        {phone}
+        {work_from}
       </TableCell>
 
       <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
-        {!!createdAt ? fDate(createdAt) : null}
+        {work_till}
       </TableCell>
     </MuiTableRow>
   )

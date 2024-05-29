@@ -25,6 +25,7 @@ export default function ListUser() {
   const { page, setPage, rowsPerPage, onChangePage } = useTable({
     defaultRowsPerPage: 6,
   })
+  const [isLoadingData, setIsLoadingData] = useState(false)
   const methods = useForm({
     defaultValues: {
       fromDate: fDateStartOfMonth(new Date()),
@@ -50,7 +51,9 @@ export default function ListUser() {
   const fetchData = useCallback(
     async ({ params }) => {
       try {
+        setIsLoadingData(true)
         const response = await _getApi('resume', { params })
+        setIsLoadingData(false)
 
         const data = response?.data?.map((item) => {
           return {
@@ -58,13 +61,20 @@ export default function ListUser() {
             cvInJson: {
               ...item?.cvInJson,
               createdAt: item?.createdAt,
-            },
+              id: item?.id,
+              file_key: item?.file_key
+            }
           }
         })
 
-        setListResume(data)
+        const listResumeData = data?.map((item) => {
+          return item?.cvInJson
+        })
+
+        setListResume(listResumeData)
         setTotalRecords(response?.totalRecords)
       } catch (error) {
+        setIsLoadingData(false)
         enqueueSnackbar(error?.message, { variant: 'error' })
       }
     },
@@ -130,6 +140,7 @@ export default function ListUser() {
           dataSource={listResume}
           TableRowComp={tableRowComp}
           heightEmptyRow={0}
+          isLoading={isLoadingData}
         />
 
         <Pagination

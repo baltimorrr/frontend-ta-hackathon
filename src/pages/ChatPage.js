@@ -20,7 +20,7 @@ export default function ChatPage() {
           p: 3,
           overflow: 'hidden',
           '& > form': {
-            height: '100%',
+            height: '90%',
           },
           '& > .MuiBox-root': {
             mb: 0,
@@ -28,7 +28,7 @@ export default function ChatPage() {
         }}
       >
         <HeaderBreadcrumbs
-          heading='Chat'
+          heading='TA Chatbot'
           sx={{
             px: 2,
           }}

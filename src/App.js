@@ -4,6 +4,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { BrowserRouter } from 'react-router-dom'
 import Router from 'routes'
 import ThemeProvider from 'theme'
+import { SnackbarProvider } from 'notistack'
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <BrowserRouter>
           <ThemeProvider>
-            <Router />
+            <SnackbarProvider>
+              <Router />
+            </SnackbarProvider>
           </ThemeProvider>
         </BrowserRouter>
       </LocalizationProvider>

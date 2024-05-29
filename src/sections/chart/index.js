@@ -197,7 +197,7 @@ export default function ChartSection({ ...other }) {
 
   return (
     <Card {...other}>
-      <CardHeader title={'title'} subheader={'subheader'} />
+      <CardHeader title={'Usage Report'} sx={{ mb: 2 }} />
 
       <Box sx={{ mx: 3 }} dir='ltr'>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

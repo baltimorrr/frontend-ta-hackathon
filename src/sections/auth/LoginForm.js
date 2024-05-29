@@ -9,10 +9,12 @@ import { LoadingButton } from '@mui/lab'
 import useAuth from 'hooks/useAuth'
 import { LOGIN_FORM_DEFAULT_VALUES, LOGIN_FORM_FIELDS } from './config'
 import { useSnackbar } from 'notistack'
+import { useState } from 'react'
 
 export default function LoginForm() {
   const { login } = useAuth()
   const { enqueueSnackbar } = useSnackbar()
+  const [canSeePassword, setCanSeePassword] = useState(false)
 
   const LoginSchema = Yup.object().shape({
     [LOGIN_FORM_FIELDS.USERNAME]: Yup.string().required('Username is required'),
@@ -69,7 +71,7 @@ export default function LoginForm() {
             // name={LOGIN_FORM_FIELDS.PASSWORD}
             name='password'
             label='Password'
-            type='password'
+            type={canSeePassword ? 'text' : 'password'}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -78,6 +80,15 @@ export default function LoginForm() {
                     width={24}
                     height={24}
                   />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment
+                  position='start'
+                  onClick={() => setCanSeePassword((prev) => !prev)}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  <Iconify icon='mdi:eye' width={24} height={24} />
                 </InputAdornment>
               ),
             }}
