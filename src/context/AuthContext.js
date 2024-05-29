@@ -64,8 +64,11 @@ export default function AuthProvider({ children }) {
     const initialze = async () => {
       try {
         const accessToken =
-          typeof window !== 'undefined' ? localStorage.getItem(accessToken) : ''
+          typeof window !== 'undefined'
+            ? localStorage.getItem('accessToken')
+            : ''
 
+        console.log('acc', accessToken, checkIsValidAccessToken(accessToken))
         if (accessToken && checkIsValidAccessToken(accessToken)) {
           setSession(accessToken)
 
@@ -124,18 +127,26 @@ export default function AuthProvider({ children }) {
     })
   }
 
-  const login = async (email, password, remember) => {
-    const { data = {} } = await _postApi('api/login', {
-      email,
+  const login = async (username, password, remember) => {
+    const { accessToken = {} } = await _postApi('auth/login', {
+      username,
       password,
     })
-    const { refreshToken = '' } = data?.user || {}
-    await getAccessToken(refreshToken, remember)
+    console.log('accessToken', accessToken)
+
+    setSession(accessToken)
+    dispatch({
+      type: 'LOGIN',
+      payload: {
+        user: {},
+      },
+    })
+
+    // const { refreshToken = '' } = data?.user || {}
+    // await getAccessToken(refreshToken, remember)
   }
 
   const logout = async () => {
-    setRememberMe(null)
-    setRefreshToken(null)
     setSession(null)
     dispatch({ type: 'LOGOUT' })
   }

@@ -7,6 +7,7 @@ import { HomePage } from 'pages/HomePage'
 import ListPage from 'pages/ListPage'
 import LoginPage from 'pages/LoginPage'
 import { useRoutes } from 'react-router-dom'
+import DetailPage from '../pages/DetailPage'
 
 export default function Router() {
   return useRoutes([
@@ -32,9 +33,7 @@ export default function Router() {
       children: [
         {
           index: true,
-          element: (
-            <ChatPage />
-          ),
+          element: <ChatPage />,
         },
       ],
     },
@@ -48,10 +47,7 @@ export default function Router() {
       children: [
         {
           index: true,
-          element: (
-                         <ChartPage />
-
-          ),
+          element: <ChartPage />,
         },
       ],
     },
@@ -65,9 +61,21 @@ export default function Router() {
       children: [
         {
           index: true,
-          element: (
-              <ListPage />
-          ),
+          element: <ListPage />,
+        },
+      ],
+    },
+    {
+      path: 'resume/:id',
+      element: (
+        <AuthGuard>
+          <Layout />
+        </AuthGuard>
+      ),
+      children: [
+        {
+          index: true,
+          element: <DetailPage />,
         },
       ],
     },

@@ -8,13 +8,16 @@ import Iconify from 'components/Iconify'
 import { LoadingButton } from '@mui/lab'
 import useAuth from 'hooks/useAuth'
 import { LOGIN_FORM_DEFAULT_VALUES, LOGIN_FORM_FIELDS } from './config'
+import { useSnackbar } from 'notistack'
+import { useState } from 'react'
 
 export default function LoginForm() {
-  const { dispatch } = useAuth()
+  const { login } = useAuth()
+  const { enqueueSnackbar } = useSnackbar()
+  const [canSeePassword, setCanSeePassword] = useState(false)
+
   const LoginSchema = Yup.object().shape({
-    [LOGIN_FORM_FIELDS.EMAIL]: Yup.string()
-      .email('Email must be a valid email address')
-      .required('Email is required'),
+    [LOGIN_FORM_FIELDS.USERNAME]: Yup.string().required('Username is required'),
     [LOGIN_FORM_FIELDS.PASSWORD]: Yup.string().required('Password is required'),
   })
 
@@ -28,15 +31,15 @@ export default function LoginForm() {
     formState: { isSubmitting },
   } = methods
 
-  const onSubmit = (data) => {
-    console.log(data)
-    dispatch({
-      type: 'INITIALIZE',
-      payload: {
-        isAuthenticated: true,
-        user: {},
-      },
-    })
+  const onSubmit = async (data) => {
+    const { username, password } = data || {}
+    console.log('data', data)
+    try {
+      const response = await login(username, password)
+      console.log('res', response)
+    } catch (error) {
+      enqueueSnackbar(error?.message, { variant: 'error' })
+    }
   }
 
   return (
@@ -48,8 +51,9 @@ export default function LoginForm() {
 
         <Stack gap={2}>
           <RHFTextField
-            name={LOGIN_FORM_FIELDS.EMAIL}
-            label='Email'
+            // name={LOGIN_FORM_FIELDS.USERNAME}
+            name='username'
+            label='Username'
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -64,9 +68,10 @@ export default function LoginForm() {
           />
 
           <RHFTextField
-            name={LOGIN_FORM_FIELDS.PASSWORD}
+            // name={LOGIN_FORM_FIELDS.PASSWORD}
+            name='password'
             label='Password'
-            type='password'
+            type={canSeePassword ? 'text' : 'password'}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -75,6 +80,15 @@ export default function LoginForm() {
                     width={24}
                     height={24}
                   />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment
+                  position='start'
+                  onClick={() => setCanSeePassword((prev) => !prev)}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  <Iconify icon='mdi:eye' width={24} height={24} />
                 </InputAdornment>
               ),
             }}

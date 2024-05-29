@@ -1,10 +1,21 @@
+// form
 import { Controller, useFormContext } from 'react-hook-form'
-import { useReactHookForm } from './FormProvider'
-import { DATE_FORMAT } from 'config'
-import { MIN_DATE_VALUE } from 'config'
-import { useCallback } from 'react'
-import { DatePicker } from '@mui/x-date-pickers'
+
+// @mui
 import { TextField } from '@mui/material'
+import { DatePicker } from '@mui/x-date-pickers'
+
+import PropTypes from 'prop-types'
+
+// config
+import { DATE_FORMAT, MIN_DATE_VALUE } from 'config'
+
+RHFDatePicker.propTypes = {
+  name: PropTypes.string,
+  label: PropTypes.string,
+  DatePickerProps: PropTypes.object,
+  inputProps: PropTypes.object,
+}
 
 export default function RHFDatePicker({
   name,
@@ -14,27 +25,22 @@ export default function RHFDatePicker({
   ...other
 }) {
   const { control } = useFormContext()
-  const { checkFormChanged = false, setIsFormProviderChanged } =
-    useReactHookForm()
 
   const props = {
     inputFormat: DATE_FORMAT,
-    componentProps: {
+    componentsProps: {
       actionBar: { actions: ['clear', 'today'] },
     },
     minDate: MIN_DATE_VALUE,
-    onchange: (field, callback) => (newValue) => {
-      field?.onChange(newValue)
+    onChange: (field, callback) => (newValue) => {
+      field.onChange(newValue)
       callback?.()
     },
     ...DatePickerProps,
   }
 
+  // eslint-disable-next-line react/prop-types
   const { onChange, ...rest } = props
-
-  const handleFormChanged = useCallback(() => {
-    setIsFormProviderChanged(checkFormChanged)
-  }, [checkFormChanged, setIsFormProviderChanged])
 
   return (
     <Controller
@@ -44,7 +50,7 @@ export default function RHFDatePicker({
         <DatePicker
           {...field}
           label={label}
-          onChange={onChange(field, handleFormChanged)}
+          onChange={onChange(field)}
           {...rest}
           renderInput={(params) => (
             <TextField

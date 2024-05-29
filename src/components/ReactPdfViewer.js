@@ -5,8 +5,8 @@ import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/toolbar/lib/styles/index.css'
 import { base64toBlob } from 'utils/pdf'
 const ReactPdfViewerCore = loadable.lib(() => import('@react-pdf-viewer/core'))
-const ReactPdfViewerToolbar = loadable.lib(() =>
-  import('@react-pdf-viewer/toolbar')
+const ReactPdfViewerToolbar = loadable.lib(
+  () => import('@react-pdf-viewer/toolbar')
 )
 
 const PDF_VIEWER_TOOLBAR = {

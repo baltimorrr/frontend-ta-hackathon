@@ -12,7 +12,7 @@ export default function LoginPage() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
       }}
     >
       <LoginForm />

@@ -6,10 +6,10 @@ import { handleRefreshToken } from './jwt'
 
 const axiosInstance = axios.create({
   baseURL: DOMAIN_SERVER_API,
-  withCredentials: true, // xem lai
+  withCredentials: true,
   headers: {
-    'Content-Type': 'application/json;charset=UTF-8', // xem lai
-    'Access-Control-Allow-Origin': '*', // xem lai
+    'Content-Type': 'application/json;charset=UTF-8',
+    'Access-Control-Allow-Origin': '*',
   },
 })
 

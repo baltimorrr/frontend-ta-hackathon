@@ -1,19 +1,22 @@
 import { useState } from 'react'
 
-import { Box, IconButton, Stack } from '@mui/material'
+import { Box, Button, IconButton, Stack } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import { NAVBAR } from 'config'
 
 import NavList from './NavList'
+import useAuth from 'hooks/useAuth'
 
 export default function NavSectionVertical({ navConfig = [] }) {
   const theme = useTheme()
   const [isCollapse, setIsCollapse] = useState(false)
+  const { logout } = useAuth()
 
   return (
     <Stack
       direction='column'
+      justifyContent='space-between'
       sx={{
         width: isCollapse ? 'auto' : NAVBAR.DASHBOARD_WIDTH,
         borderRight: `1px dashed ${theme.palette.grey[400]}`,
@@ -32,23 +35,6 @@ export default function NavSectionVertical({ navConfig = [] }) {
           }}
           key={item?.subheader + index}
         >
-          {/* {!isCollapse && (
-            <Typography
-              variant='subtitle2'
-              sx={{
-                textTransform: 'uppercase',
-                fontSize: pxToRem(11),
-                color: theme.palette.grey[500],
-                paddingBottom: theme.spacing(1.5),
-                '&:hover': {
-                  color: theme.palette.grey[800],
-                },
-              }}
-            >
-              {item?.subheader}
-            </Typography>
-          )} */}
-
           <NavList list={item?.items} isCollapse={isCollapse} />
         </Box>
       ))}
@@ -90,6 +76,14 @@ export default function NavSectionVertical({ navConfig = [] }) {
           </Box>
         </IconButton>
       </Stack>
+
+      <Button
+        variant='outlined'
+        sx={{ margin: '16px !important' }}
+        onClick={logout}
+      >
+        Log out
+      </Button>
     </Stack>
   )
 }

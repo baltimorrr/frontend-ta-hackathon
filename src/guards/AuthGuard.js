@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 // hooks
 import useAuth from 'hooks/useAuth'
 import LoginPage from 'pages/LoginPage'
+import Loading from 'components/Loading'
 
 // pages
 // const Login = loadable(() => import('pages/auth/Login'))
@@ -18,16 +19,15 @@ AuthGuard.propTypes = {
 }
 
 export default function AuthGuard({ children }) {
-    const { isAuthenticated} = useAuth()
-  // const isAuthenticated = false
+  const { isAuthenticated, isInitialized } = useAuth()
 
   const { pathname } = useLocation()
 
   const [requestedLocation, setRequestedLocation] = useState(null)
 
-  //   if (!isInitialized) {
-  //     return <LoadingScreen />
-  //   }
+  if (!isInitialized) {
+    return <Loading />
+  }
 
   if (!isAuthenticated) {
     if (pathname !== requestedLocation) {

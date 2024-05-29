@@ -1,8 +1,8 @@
 // @mui
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles'
 
 export default function BaseOptionChart() {
-  const theme = useTheme();
+  const theme = useTheme()
 
   const LABEL_TOTAL = {
     show: true,
@@ -11,7 +11,7 @@ export default function BaseOptionChart() {
     fontSize: theme.typography.subtitle2.fontSize,
     fontWeight: theme.typography.subtitle2.fontWeight,
     lineHeight: theme.typography.subtitle2.lineHeight,
-  };
+  }
 
   const LABEL_VALUE = {
     offsetY: 8,
@@ -19,7 +19,7 @@ export default function BaseOptionChart() {
     fontSize: theme.typography.h3.fontSize,
     fontWeight: theme.typography.h3.fontWeight,
     lineHeight: theme.typography.h3.lineHeight,
-  };
+  }
 
   return {
     // Colors
@@ -184,5 +184,5 @@ export default function BaseOptionChart() {
         },
       },
     ],
-  };
+  }
 }

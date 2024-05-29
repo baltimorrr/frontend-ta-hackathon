@@ -1,8 +1,12 @@
-import { FormHelperText } from '@mui/material'
-import UploadSingleFile from 'components/upload/UploadSingleFile'
+// form
 import { Controller, useFormContext } from 'react-hook-form'
 
-export default function RHFUploadSingleFile({ name, accept, ...other }) {
+// @mui
+import { FormHelperText } from '@mui/material'
+
+import UploadSingleCV from 'components/upload/UploadSingleCV'
+
+export default function RHFUploadCV({ name, ...other }) {
   const { control } = useFormContext()
 
   return (
@@ -13,17 +17,17 @@ export default function RHFUploadSingleFile({ name, accept, ...other }) {
         const checkError = !!error && !field.value
 
         return (
-          <UploadSingleFile
-            accept={accept}
+          <UploadSingleCV
             file={field.value}
             error={checkError}
             helperText={
               checkError && (
                 <FormHelperText error sx={{ px: 2 }}>
-                  {error?.message}
+                  {error.message}
                 </FormHelperText>
               )
             }
+            {...other}
           />
         )
       }}
