@@ -24,26 +24,11 @@ const MessageStyled = styled(Typography)(({ theme }) => ({
   padding: theme.spacing(1.5),
   borderRadius: theme.spacing(3),
   minWidth: 48,
-  maxWidth: 500,
+  maxWidth: 600,
   fontSize: 14,
   color: theme.palette.common.black,
   fontWeight: 400,
   whiteSpace: 'break-spaces',
-}))
-
-const BounceStyled = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center'
-}))
-
-const BounceItemStyled = styled('div')(({ theme }) => ({
-  width: '16px',
-  height: '16px',
-  margin: '3px 6px',
-  borderRadius: '50%',
-  backgroundColor: '#a3a1a1',
-  opacity: 1,
-  animation: 'bouncing-loader 0.6s infinite alternate'
 }))
 
 export default function ChatSection() {
@@ -53,6 +38,7 @@ export default function ChatSection() {
   const [isSubmittingNewConversation, setIsSubmittingNewConversation] =
     useState(false)
   const [conversationData, setConversationData] = useState([])
+  const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false);
   const chatRef = useRef(null)
   const { enqueueSnackbar } = useSnackbar()
 
@@ -94,7 +80,9 @@ export default function ChatSection() {
         })
       )
       setValue('message', '')
+      setIsLoadingNewMessage(true)
       await _postApi('chat/message', data)
+      setIsLoadingNewMessage(false)
       const conversationResponseData = await _getApi('chat/currentThread/new')
       setConversationData(conversationResponseData)
     } catch (error) {
@@ -129,6 +117,20 @@ export default function ChatSection() {
       block: 'end',
     })
   }, [conversationData])
+
+  useEffect(() => {
+    if (isLoadingNewMessage) {
+      setConversationData((prev) =>
+        prev.concat({
+          id: prev?.length,
+          role: 'assistant',
+          content: null,
+        })
+      )
+
+      console.log('Huy data: ', conversationData)
+    }
+  }, [isLoadingNewMessage])
 
   useEffect(() => {
     fetchConversationData()
@@ -207,9 +209,14 @@ export default function ChatSection() {
                               },
                         ]}
                       >
-                        <div dangerouslySetInnerHTML={{ __html: content }}>
-                        </div>
-                        {/*<BounceMessageComponent />*/}
+                        {
+                          content ? (
+                            <div dangerouslySetInnerHTML={{ __html: content }}>
+                            </div>
+                          ) : (
+                            <BounceMessageComponent />
+                          )
+                        }
                       </MessageStyled>
                     </Stack>
                   )
